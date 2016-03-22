@@ -22,5 +22,23 @@ class Racer
     return mongo_client[collection]
   end
 
+  def self.all(prototype={}, sort={:number=>1}, offset=0, limit=nil)
+    # default for sort is ascending
+    # sort, skip, and limit are optional
+    # skip default is 0, limit default is nil
+
+    result=collection.find(prototype)
+          .sort(sort)
+          .skip(offset)
+    result=result.limit(limit) if !limit.nil?
+    # add projection later?
+    # .projection({_id:true, city:true, state:true, pop:true})
+
+    return result
+  end
+
+
+
+
 
 end

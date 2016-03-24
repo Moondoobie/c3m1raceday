@@ -71,8 +71,8 @@ class Racer
         :secs => @secs
       	)
 
-
-      @id = result.inserted_id.first.to_s
+		#@id = result.BSON::ObjectId(inserted_ids).to_s
+      @id = result.inserted_id.to_s
   end
 
 end

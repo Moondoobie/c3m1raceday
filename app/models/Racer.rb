@@ -117,6 +117,35 @@ class Racer
     nil
   end
 
+  def self.paginate(params)
+    page=(params[:page] || 1).to_i
+    limit=(params[:per_page] || 30).to_i
+    skip=(page-1)*limit
+
+    racers=[]
+    
+    #find racer docs
+    #self.collection.find.sort({:number => 1}).each { |r| pp r }
+    self.all({}, {:number => 1}, skip, limit).each do |doc|
+      racers << Racer.new(doc)
+    end
+    
+    total=self.all({}, {:number => 1}, 0, 1).count
+    
+    WillPaginate::Collection.create(page, limit, total) do |pager|
+      pager.replace(racers)
+    end
+
+    # find all racers sorted by number assending.
+    # limit the results to page and limit values. - project only these two?
+
+    # convert each document hash to an instance of a Racer class
+    # Return a WillPaginate::Collection with the page, limit, and total values 
+    # filled in – as well as the page worth of data.
+
+  end
+
+
 
 
 end

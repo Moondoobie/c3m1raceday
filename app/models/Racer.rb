@@ -60,7 +60,6 @@ class Racer
   end
 
   def save
-      #result = self.class.collection.insert_one(params ={})
       result = self.class.collection.insert_one(
         :_id => @id, 
         :number => @number,
@@ -71,8 +70,30 @@ class Racer
         :secs => @secs
       	)
 
-		#@id = result.BSON::ObjectId(inserted_ids).to_s
       @id = result.inserted_id.to_s
+  end
+
+  def update(params)
+    @number=params[:number].to_i
+    @first_name=params[:first_name]
+    @last_name=params[:last_name]
+    @gender=params[:gender]
+    @group=params[:group]
+    @secs=params[:secs].to_i
+
+    params.slice!(:number, :first_name, :last_name, :gender, :group, :secs)
+    self.class.collection.find(:_id => BSON::ObjectId.from_string(self.id)).replace_one({
+      number: @number,
+      first_name: @first_name,
+      last_name: @last_name,
+      gender: @gender,
+      group: @group,
+      secs: @secs
+    })
+
+    # find the racer associated with the current @id instance variable in the database
+    # update the racer with the supplied values – replacing all values
+
   end
 
 end

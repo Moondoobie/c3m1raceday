@@ -1,4 +1,5 @@
 class Racer
+  include ActiveModel::Model
   attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
   #MONGO_URL='mongodb://localhost:27017'
   #MONGO_DATABASE='raceday_development'
@@ -95,5 +96,27 @@ class Racer
     # update the racer with the supplied values – replacing all values
 
   end
+
+  def destroy
+    self.class.collection.find(:number => @number).delete_one()
+
+    # find the racer associated with the current @number instance variable in the database
+    # remove that instance from the database
+
+  end
+
+  def persisted?
+    !@id.nil?
+  end
+
+  def created_at
+    nil
+  end
+
+  def updated_at
+    nil
+  end
+
+
 
 end
